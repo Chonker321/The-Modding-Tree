@@ -8,8 +8,8 @@ addLayer("p", {
     }},
     color: "#4BDC13",
     requires: new Decimal(10), // Can be a function that takes requirement increases into account
-    resource: "prestige points", // Name of prestige currency
-    baseResource: "points", // Name of resource prestige is based on
+    resource: "L Grips", // Name of prestige currency
+    baseResource: "Grips", // Name of resource prestige is based on
     baseAmount() {return player.points}, // Get the current amount of baseResource
     type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
     exponent: 0.5, // Prestige currency exponent
@@ -24,5 +24,30 @@ addLayer("p", {
     hotkeys: [
         {key: "p", description: "P: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
-    layerShown(){return true}
+    layerShown(){return true},
+    upgrades: {
+        11: {
+            title: "Heavily Used Ripped Up Teddy Bear",
+            description: "Doubles your grips.",
+            cost: new Decimal(5),
+        },
+        12: {
+            title: "Insatiable Hunger For Better Grips",
+            description: "Boosts Grips Based On L Grips.",
+            cost: new Decimal(1),
+            effect() {
+                return player[this.layer].points.add(1).pow(0.5)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+        },
+        13: {
+            title: "Gorilla Glue From Home Depot",
+            description: "L Grips Is Boosted By Grips.",
+            cost: new Decimal(1),
+            effect() {
+                return player.points.add(1).pow(0.15)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" }, // Add formatting to the effect
+        },
+    },
 })
